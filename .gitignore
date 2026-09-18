@@ -1,0 +1,30 @@
+# Build output, at any level of the monorepo
+build/
+dist/
+*.o
+*.d
+*.elf
+*.hex
+*.bin
+*.map
+
+# Python, for the phase 2 host application
+__pycache__/
+*.py[cod]
+.venv/
+venv/
+*.egg-info/
+
+# Node, if any tooling ends up needing it
+node_modules/
+
+# Editors
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+
+# OS
+.DS_Store
+Thumbs.db
