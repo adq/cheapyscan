@@ -50,11 +50,16 @@ not apply to a session that is already open, so log out and back in afterwards.
 Then:
 
 ```
-make                            # build build/cheapscan.hex
+make                            # build build/cheapscan.hex, then run the tests
+make firmware                   # build only, no tests
+make test                       # run the tests only
 make size                       # flash and RAM usage
 make flash                      # upload
 make flash PORT=/dev/ttyACM1    # upload to a different port
 ```
+
+`make` runs the host tests after the build and stops on a failure, so a broken
+parser never reaches `make flash`.
 
 Fuses are never touched, so the stock bootloader keeps working.
 
@@ -167,13 +172,20 @@ scripts/          toolchain setup
 
 ## Tests
 
+`make` runs these automatically. To run them on their own:
+
 ```
-./tests/run.sh
+make test        # or ./tests/run.sh from anywhere
 ```
 
 This compiles `src/main.c` natively with the UART and stepper layers replaced
 by stubs, and checks every command and reply. It needs a native gcc, not
-avr-gcc. The timer and pin code can only be checked on the board.
+avr-gcc, so it runs on a machine with no AVR toolchain installed.
+
+`tests/run.sh` is a wrapper around `make test`, so the compiler flags have only
+one definition.
+
+The timer and pin code can only be checked on the board.
 
 ## Licence and attribution
 

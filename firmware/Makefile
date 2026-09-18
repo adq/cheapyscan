@@ -3,7 +3,9 @@
 
 # Firmware for an Arduino Mega 2560 with a RAMPS 1.4 shield.
 #
-#   make          build build/cheapscan.hex
+#   make          build build/cheapscan.hex, then run the host tests
+#   make firmware build only, no tests
+#   make test     run the host tests only, needs no AVR toolchain
 #   make size     report flash and RAM usage
 #   make flash    upload over USB
 #   make clean
@@ -36,9 +38,22 @@ CFLAGS = -mmcu=$(MCU) -DF_CPU=$(F_CPU) -Os -std=gnu11 \
 
 LDFLAGS = -mmcu=$(MCU) -Wl,--gc-sections -flto
 
-.PHONY: all size flash clean
+# The host test compiles src/main.c natively with the UART and stepper layers
+# stubbed out, so it uses the system compiler rather than avr-gcc.
+HOSTCC     = gcc
+TEST_BIN   = $(BUILD)/test_parser
+TEST_SRC   = tests/test_parser.c
+HOSTCFLAGS = -std=gnu11 -Wall -Wextra -O1 -g -Itests/fake -MMD -MP
 
-all: $(BUILD)/$(TARGET).hex
+# Building the firmware and running the tests both write to build/ and both
+# print a summary, so keep them in order rather than letting -j interleave them.
+.NOTPARALLEL:
+
+.PHONY: all firmware test size flash clean
+
+all: firmware test
+
+firmware: $(BUILD)/$(TARGET).hex
 
 $(BUILD):
 	mkdir -p $(BUILD)
@@ -53,6 +68,12 @@ $(BUILD)/$(TARGET).hex: $(BUILD)/$(TARGET).elf
 	$(OBJCOPY) -O ihex -R .eeprom $< $@
 	@$(SIZE) --format=avr --mcu=$(MCU) $<
 
+$(TEST_BIN): $(TEST_SRC) | $(BUILD)
+	$(HOSTCC) $(HOSTCFLAGS) $(TEST_SRC) -o $@
+
+test: $(TEST_BIN)
+	@$(TEST_BIN)
+
 size: $(BUILD)/$(TARGET).elf
 	$(SIZE) --format=avr --mcu=$(MCU) $<
 
@@ -64,3 +85,4 @@ clean:
 	rm -rf $(BUILD)
 
 -include $(DEP)
+-include $(TEST_BIN).d
