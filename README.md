@@ -26,3 +26,11 @@ cd firmware
 make
 make flash
 ```
+
+## Licence
+
+MIT. See [LICENSE](LICENSE).
+
+The firmware contains no code from any other project. The references used while
+writing it, and why they carry no licensing obligation here, are recorded in
+[`firmware/README.md`](firmware/README.md#licence-and-attribution).

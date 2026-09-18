@@ -1,3 +1,6 @@
+/* SPDX-License-Identifier: MIT */
+/* Copyright (c) 2026 Andrew de Quincey */
+
 #include "config.h"
 #include "stepper.h"
 

@@ -1,3 +1,6 @@
+/* SPDX-License-Identifier: MIT */
+/* Copyright (c) 2026 Andrew de Quincey */
+
 /*
  * config.h - hardware configuration for RAMPS 1.4 on an Arduino Mega 2560.
  *

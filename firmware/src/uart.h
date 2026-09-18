@@ -1,3 +1,6 @@
+/* SPDX-License-Identifier: MIT */
+/* Copyright (c) 2026 Andrew de Quincey */
+
 /*
  * uart.h - UART0 on the Mega 2560, which is the port wired to the on-board
  * ATmega16U2 USB interface.

@@ -1,5 +1,8 @@
 #!/usr/bin/env bash
 #
+# SPDX-License-Identifier: MIT
+# Copyright (c) 2026 Andrew de Quincey
+#
 # Build and run the host-side parser test. Needs a native gcc, not avr-gcc.
 
 set -euo pipefail

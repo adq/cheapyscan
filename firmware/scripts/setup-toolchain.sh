@@ -1,5 +1,8 @@
 #!/usr/bin/env bash
 #
+# SPDX-License-Identifier: MIT
+# Copyright (c) 2026 Andrew de Quincey
+#
 # Install the AVR toolchain needed to build and flash this firmware, and add
 # the current user to the group that owns USB serial devices.
 #

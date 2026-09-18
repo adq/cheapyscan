@@ -174,3 +174,33 @@ scripts/          toolchain setup
 This compiles `src/main.c` natively with the UART and stepper layers replaced
 by stubs, and checks every command and reply. It needs a native gcc, not
 avr-gcc. The timer and pin code can only be checked on the board.
+
+## Licence and attribution
+
+This firmware is MIT licensed. See [LICENSE](../LICENSE) at the repository root.
+
+No code from any other project is included here. It was written against the AVR
+registers directly, and the sources below were used as references rather than
+copied from. They are recorded so that anyone auditing the licensing can check
+the same things.
+
+| Source | Licence | What was used |
+|---|---|---|
+| [Marlin](https://github.com/MarlinFirmware/Marlin) `Marlin/src/pins/ramps/pins_RAMPS.h` | GPLv3 | The six RAMPS 1.4 pin numbers for the X and Y steppers. |
+| [RepRap wiki, RAMPS 1.4](https://reprap.org/wiki/RAMPS_1.4) | CC BY-SA 3.0 | Independent confirmation of those same pin numbers. |
+| [ArduinoCore-avr](https://github.com/arduino/ArduinoCore-avr) `variants/mega/pins_arduino.h` | LGPL 2.1 | The AVR port and bit each Arduino pin number maps to. |
+| [Grbl](https://github.com/gnea/grbl) `grbl/stepper.c` | GPLv3 | Read for its interrupt structure. Informed the choice of a 16-bit timer in CTC mode, and nothing else. |
+
+On the pin numbers: which Mega pin the RAMPS 1.4 board routes to a given stepper
+driver input is a fact about a circuit board, not an authored work, and the same
+numbers were confirmed from two independent sources.
+
+On Grbl: the design here is structurally different. Grbl runs a single stepper
+interrupt that walks a Bresenham line across all axes from a pre-computed
+segment buffer, and uses a second timer to end each step pulse. This firmware
+gives each axis its own timer, has no Bresenham, no segment buffer and no
+planner, and ends the pulse inside the same interrupt.
+
+If you later paste actual code from Marlin, Repetier or Grbl into this project,
+all three are GPLv3 and that licence would attach to the result. The MIT licence
+above would no longer be accurate.

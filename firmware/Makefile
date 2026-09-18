@@ -1,3 +1,6 @@
+# SPDX-License-Identifier: MIT
+# Copyright (c) 2026 Andrew de Quincey
+
 # Firmware for an Arduino Mega 2560 with a RAMPS 1.4 shield.
 #
 #   make          build build/cheapscan.hex

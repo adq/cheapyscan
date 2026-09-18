@@ -1,3 +1,6 @@
+/* SPDX-License-Identifier: MIT */
+/* Copyright (c) 2026 Andrew de Quincey */
+
 /*
  * Host-side test for the command parser in src/main.c.
  *
