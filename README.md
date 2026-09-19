@@ -1,4 +1,4 @@
-# cheapscan
+# cheapyscan
 
 A photogrammetry rig built from 3D printer parts. A turntable rotates the
 object and a second rotational axis reorients it, while the camera stays fixed.

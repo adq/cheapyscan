@@ -3,7 +3,7 @@
 
 # Firmware for an Arduino Mega 2560 with a RAMPS 1.4 shield.
 #
-#   make          build build/cheapscan.hex, then run the host tests
+#   make          build build/cheapyscan.hex, then run the host tests
 #   make firmware build only, no tests
 #   make test     run the host tests only, needs no AVR toolchain
 #   make size     report flash and RAM usage
@@ -19,7 +19,7 @@ PORT     ?= /dev/ttyACM0
 PROGRAMMER = wiring
 UPLOAD_BAUD = 115200
 
-TARGET = cheapscan
+TARGET = cheapyscan
 BUILD  = build
 SRC    = src/main.c src/uart.c src/stepper.c
 OBJ    = $(SRC:src/%.c=$(BUILD)/%.o)

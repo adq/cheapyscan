@@ -1,4 +1,4 @@
-# cheapscan firmware
+# cheapyscan firmware
 
 Minimal firmware for an Arduino Mega 2560 with a RAMPS 1.4 shield, salvaged
 from a 3D printer and reused as the motion controller for a photogrammetry rig.
@@ -50,7 +50,7 @@ not apply to a session that is already open, so log out and back in afterwards.
 Then:
 
 ```
-make                            # build build/cheapscan.hex, then run the tests
+make                            # build build/cheapyscan.hex, then run the tests
 make firmware                   # build only, no tests
 make test                       # run the tests only
 make size                       # flash and RAM usage
@@ -72,7 +72,7 @@ terminal program works.
 picocom -b 115200 /dev/ttyACM0
 ```
 
-On start the firmware sends `cheapscan ready`.
+On start the firmware sends `cheapyscan ready`.
 
 ### Commands
 

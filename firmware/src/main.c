@@ -314,7 +314,7 @@ int main(void)
     uart_init();
     sei();
 
-    uart_puts("cheapscan ready\n");
+    uart_puts("cheapyscan ready\n");
 
     for (;;) {
         if (uart_poll_line(line, (uint8_t)sizeof(line))) {
