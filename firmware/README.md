@@ -63,16 +63,31 @@ parser never reaches `make flash`.
 
 Fuses are never touched, so the stock bootloader keeps working.
 
+`scripts/flash.sh` wraps all of that: it builds, runs the tests, finds the
+board, and flashes it. It stops with a readable message if no board is
+connected, if more than one serial device is present, or if you lack write
+access to the port.
+
+```
+./scripts/flash.sh                 # find the board automatically
+./scripts/flash.sh /dev/ttyACM1    # use a specific port
+./scripts/flash.sh --no-build      # flash what is already built
+```
+
 ## Talking to it
 
 115200 baud, 8N1. One command per line. Carriage returns are ignored, so any
 terminal program works.
 
 ```
+../tools/motor-console.py     # finds the board, waits for its banner
 picocom -b 115200 /dev/ttyACM0
 ```
 
 On start the firmware sends `cheapyscan ready`.
+
+Opening the port asserts DTR, which resets the board, so the firmware restarts
+and both position counters go back to zero every time you connect.
 
 ### Commands
 

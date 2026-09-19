@@ -11,9 +11,10 @@ an old 3D printer.
 | Folder | What it is |
 |---|---|
 | [`firmware/`](firmware/) | Firmware for the Mega 2560 and RAMPS 1.4. Drives the two stepper motors over USB serial. Plain C, built with avr-gcc. |
+| [`tools/`](tools/) | Development tools. `motor-console.py` drives the board by hand for testing. |
 
-The host application that drives the firmware and triggers the camera is not
-written yet.
+The host application that runs a capture and triggers the camera is not written
+yet.
 
 ## Getting started
 
@@ -22,10 +23,18 @@ command protocol, and how to build and flash.
 
 ```
 cd firmware
-./scripts/setup-toolchain.sh
-make
-make flash
+./scripts/setup-toolchain.sh    # AVR toolchain and serial group, once
+./scripts/flash.sh              # build, test and flash
 ```
+
+Then drive the motors by hand:
+
+```
+./tools/motor-console.py
+```
+
+That needs [uv](https://docs.astral.sh/uv/), which installs its own
+dependencies on first run. There is no virtual environment to create.
 
 ## Licence
 
