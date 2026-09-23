@@ -35,6 +35,93 @@ set too high will heat them with the motors standing still.
 Microstepping is set by the jumpers under each driver socket, not in firmware.
 For an A4988 at 1/16 microstepping, all three jumpers are fitted.
 
+### Motor wiring
+
+Switch off the 12V supply before connecting or disconnecting a motor. Unplugging
+a motor from a powered driver can destroy the driver, and the drivers are
+energised whenever the firmware is running.
+
+A bipolar stepper has two coils, each with two wires. Each coil must sit on an
+adjacent pair of pins on the driver's four-pin motor header. To find the pairs,
+measure resistance between the wires with a multimeter: the two wires of one
+coil read a few ohms, and wires from different coils read open circuit.
+
+If a coil is split across the two pairs, the motor judders or buzzes in place
+instead of turning. Salvaged motors often have cables wired for a different
+board, so check each one before first use.
+
+Which coil goes on which pair, and which way round each coil's wires go, only
+affects the direction of rotation. To reverse an axis, either reverse the two
+wires of one coil or set `X_DIR_INVERT` or `Y_DIR_INVERT` to 1 in
+`src/config.h` and reflash.
+
+### Setting the driver current
+
+Each A4988 driver has a small trimpot that sets the maximum current it sends
+through each motor coil. Set it before running the rig for any length of time.
+Too low and the motor stalls or skips steps. Too high and the driver and motor
+overheat, which matters here because the firmware keeps the drivers energised
+between moves.
+
+The trimpot sets a reference voltage, Vref. The current limit follows from
+Vref and the value of the driver's two current sense resistors:
+
+```
+I_max = Vref / (8 × Rs)        Vref = 8 × I_max × Rs
+```
+
+`Rs` is in ohms. The sense resistors are the two small black surface-mount
+parts next to the driver chip. Their marking gives the value:
+
+| Marking | Rs | Vref per amp |
+|---|---|---|
+| R050 | 0.05 Ω | 0.4 V |
+| R068 | 0.068 Ω | 0.544 V |
+| R100 | 0.1 Ω | 0.8 V |
+| R200 | 0.2 Ω | 1.6 V |
+
+The `R` marks the decimal point, so `R100` is 0.100 Ω, not 10 Ω. A plain
+three-digit code with no `R`, such as `100`, is a different part: in that code
+`100` means 10 Ω. Check you are reading the resistors beside the chip. Clone
+boards differ between manufacturers, so read the marking on your own drivers
+rather than assuming a value. The drivers on this rig are marked `R100`.
+
+There is one sense resistor per motor coil. The A4988 drives each coil through
+its own H-bridge, and each bridge's current returns to ground through its own
+resistor. The chip reads the voltage across each resistor and switches that
+bridge off briefly whenever the coil reaches its limit, which holds each coil
+at its set current. The coils need separate feedback because microstepping
+drives them at different currents at the same moment, one following a sine and
+the other a cosine. Vref is shared: the chip scales it for each coil according
+to the microstep position, so one trimpot sets the maximum for both, and both
+resistors must have the same value.
+
+To choose a target current, find the rated current per phase on the motor's
+label or datasheet and stay at or below it. The rig turns slowly, so a lower
+current is usually enough and runs cooler. Without a heatsink or fan, an A4988
+handles roughly 1 A per coil.
+
+To set it:
+
+1. With the 12V supply on and the motors idle, measure the voltage between the
+   trimpot's metal top and a ground pin on the RAMPS board.
+2. Turn the trimpot a small amount and measure again. Use an insulated
+   screwdriver, because a metal tip slipping onto nearby pins can damage the
+   driver. The direction that raises Vref varies between boards, so find it by
+   measuring.
+3. Stop when the reading matches the Vref for your target current.
+4. Run a few moves, then touch the driver chip and the motor. Warm is normal.
+   If either is too hot to keep a finger on, lower Vref.
+
+For example, a motor rated at 1.0 A on a driver with `R100` resistors needs
+Vref = 8 × 1.0 × 0.1 = 0.8 V. Setting 0.6 V gives 0.75 A, which is usually
+plenty for a turntable.
+
+Sources: the [Pololu A4988 product page](https://www.pololu.com/product/1182)
+for the formula, the cooling limit and the power-off warning, and the
+[RepRap wiki](https://reprap.org/wiki/A4988_vs_DRV8825_Chinese_Stepper_Driver_Boards)
+for the resistor values found on clone boards.
+
 ## Building and flashing
 
 Install the toolchain and get serial access:
